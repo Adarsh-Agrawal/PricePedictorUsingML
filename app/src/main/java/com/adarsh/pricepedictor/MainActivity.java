@@ -31,6 +31,8 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -167,6 +169,27 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu , menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    //performing task of selected atcion bar item
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.about:
+                //finish();
+                break;
+            case R.id.privacy:
+                //finish();
+                break;
+            case R.id.terms:
+               // finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

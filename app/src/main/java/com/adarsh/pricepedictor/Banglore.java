@@ -134,7 +134,7 @@ public class Banglore extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         FirebaseCustomRemoteModel remoteModel =
-                new FirebaseCustomRemoteModel.Builder("BanglorePrice").build();//////////
+                new FirebaseCustomRemoteModel.Builder("BangloreModel").build();//////////
         FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder()
                 .requireWifi()
                 .build();
@@ -157,7 +157,7 @@ public class Banglore extends AppCompatActivity {
                             interpreter = new Interpreter(modelFile);
                         }else{
                             try {
-                                InputStream inputStream = getAssets().open("BanglorePrice.tflite");///////
+                                InputStream inputStream = getAssets().open("BangloreModel.tflite");///////
                                 byte[] model = new byte[inputStream.available()];
                                 inputStream.read(model);
                                 ByteBuffer buffer = ByteBuffer.allocateDirect(model.length)
@@ -416,7 +416,7 @@ public class Banglore extends AppCompatActivity {
     }
 
     private MappedByteBuffer loadModelFile() throws IOException{
-        AssetFileDescriptor fileDescriptor = this.getAssets().openFd("BanglorePrice.tflite");/////
+        AssetFileDescriptor fileDescriptor = this.getAssets().openFd("BangloreModel.tflite");/////
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
         FileChannel fileChannel = inputStream.getChannel();
         long startOffset = fileDescriptor.getStartOffset();

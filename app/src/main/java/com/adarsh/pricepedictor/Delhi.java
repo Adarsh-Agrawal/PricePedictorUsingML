@@ -72,7 +72,7 @@ public class Delhi extends AppCompatActivity {
     String fur, local;
     int indexLocal;
     int indexFur;
-    double []arr = new double[80];
+    double []arr = new double[78];
     Interpreter interpreter;
     TextView price;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -141,7 +141,7 @@ public class Delhi extends AppCompatActivity {
 
 
         FirebaseCustomRemoteModel remoteModel =
-                new FirebaseCustomRemoteModel.Builder("DelhiPrice").build();
+                new FirebaseCustomRemoteModel.Builder("DelhiModel").build();
         FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder()
                 .requireWifi()
                 .build();
@@ -164,7 +164,7 @@ public class Delhi extends AppCompatActivity {
                             interpreter = new Interpreter(modelFile);
                         }else{
                             try {
-                                InputStream inputStream = getAssets().open("DelhiPrice.tflite");
+                                InputStream inputStream = getAssets().open("DelhiModel.tflite");
                                 byte[] model = new byte[inputStream.available()];
                                 inputStream.read(model);
                                 ByteBuffer buffer = ByteBuffer.allocateDirect(model.length)
@@ -185,7 +185,7 @@ public class Delhi extends AppCompatActivity {
         furnishSpinner = findViewById(R.id.furnishSpinner);
         btnSubmit = findViewById(R.id.btnSubmit);
 
-        for(int i=0;i<80;i++){
+        for(int i=0;i<78;i++){
             arr[i] = 0d;
         }
 
@@ -193,7 +193,7 @@ public class Delhi extends AppCompatActivity {
         furnishing.add("Select furnishing");
         furnishing.add("Furnished");
         furnishing.add("Semi-Furnished");
-        furnishing.add("Unfurnished");
+        //furnishing.add("Unfurnished");
 
         furnishSpinner.setAdapter(new ArrayAdapter<>(Delhi.this,
                 android.R.layout.simple_spinner_dropdown_item,furnishing));
@@ -290,7 +290,7 @@ public class Delhi extends AppCompatActivity {
         locality.add("Vasundhara Enclave");
         locality.add("Vikram Vihar, Lajpat Nagar");
         locality.add("Yamuna Vihar, Shahdara");
-        locality.add("other");
+        //locality.add("other");
 
         spinner.setAdapter(new ArrayAdapter<>(Delhi.this,
                 android.R.layout.simple_spinner_dropdown_item,locality));
@@ -300,7 +300,7 @@ public class Delhi extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 local = parent.getItemAtPosition(position).toString();
-                indexLocal = position+5;
+                indexLocal = position+4;
                 arr[indexLocal] = 1d;
 
             }
@@ -330,11 +330,12 @@ public class Delhi extends AppCompatActivity {
                     Double bath = Double.parseDouble(bathroom);
                     arr[2] = bath;
 
-                    double [] input =new double[80];
-                    for(int i=0;i<80;i++){
+                    double [] input =new double[78];
+                    for(int i=0;i<78;i++){
                         input[i] = arr[i];
                     }
                     float prediction = calculate(input);
+                    prediction = prediction*100000;
                     String firstNumberAsString = String.format("%.0f", prediction);
                     price.setText(firstNumberAsString);
                     etBHK.setText("");
@@ -349,8 +350,8 @@ public class Delhi extends AppCompatActivity {
     ////////////////calculations in Machine Learning model////////////////
     private float calculate(double[] input) {
 
-        float[] inputVal = new float[80];
-        for(int i=0;i<80;i++){
+        float[] inputVal = new float[78];
+        for(int i=0;i<78;i++){
             inputVal[i] = (float) input[i];
         }
         float[][] outputVal = new float[1][1];
@@ -360,7 +361,7 @@ public class Delhi extends AppCompatActivity {
     }
 
     private MappedByteBuffer loadModelFile() throws IOException{
-        AssetFileDescriptor fileDescriptor = this.getAssets().openFd("DelhiPrice.tflite");
+        AssetFileDescriptor fileDescriptor = this.getAssets().openFd("DelhiModel.tflite");
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
         FileChannel fileChannel = inputStream.getChannel();
         long startOffset = fileDescriptor.getStartOffset();
